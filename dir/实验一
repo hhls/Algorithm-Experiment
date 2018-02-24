@@ -1,0 +1,477 @@
+```
+/*----------------------------------------------实验1----------------------------------------------
+1.实现线性表顺序存储的各种基本运算（假设元素额类型为char）,设计完成第61页－62页实验题。
+*/
+#include<string.h>
+#include<stdlib.h>//库函数，不声明，malloc无法使用，显示未定义
+#define	MaxSize 100 //#define结尾不需要;
+#include<stdio.h>//不声明，printf无法使用，显示未定义
+typedef char ElemType; 
+typedef struct 
+{
+        ElemType data[MaxSize];
+        int length;
+}SqList;
+void InitList(SqList* &L)//初始化操作，将线性表置空
+{
+	 L=(SqList*) malloc (sizeof(SqList));
+     L->length = 0; 
+} 
+ 
+void CreatList(SqList* &L,int n)//建立一个顺序存储的线性表
+{
+     int i;
+     for(i=0;i<n; i++)
+        scanf("%d",&L->data[i]);
+     L->length = n;
+} 
+void ListEmpty(SqList* L)//判断顺序表是否为空
+{
+	if(L->length==0)
+	{
+		printf("该表为空表,请创建：");
+		printf("\n");
+	}
+
+	else
+		printf("该表有数据  ");
+
+}
+/*
+void CreateList(SqList*& L,ElemType a[],int n)//建立顺序表
+{
+	int i;
+	L=(SqList*) malloc (sizeof(SqList));
+	for(i=0;i<n;i++)
+		L->data[i]=a[i];
+	L->length=n;
+}
+*/
+void HeadInsert(SqList*& L,ElemType e)//头插
+{
+	int j;
+	for(j=L->length;j>0;j--)
+		L->data[j]=L->data[j-1];
+	L->data[0]=e;
+	L->length++;
+}
+void EndInsert(SqList*& L,ElemType e)//尾插
+{	
+	L->data[L->length]=e;
+	L->length++;
+
+
+}
+bool ListInsert(SqList*& L,int i,ElemType e) //随机插入
+{
+	int j;
+	if(i<1||i>L->length+1)
+		return false;
+	i--;
+	for(j=L->length;j>i;j--)
+		L->data[j]=L->data[j-1];
+	L->data[i]=e;
+	L->length++;
+	return true;
+
+}
+void DelNode(SqList*& L,ElemType e)//删除顺序表所有指定元素
+{
+	int k=0,i=0;
+	while(i<L->length)
+	{
+		if(L->data[i]==e)
+			k++;
+		else
+			L->data[i-k]=L->data[i];
+		i++;
+	}
+	L->length-=k;
+}
+void DelNode1(SqList*& L,int i)//删除顺序表指定逻辑序号元素
+{
+	int j;
+	if(i<1||i>L->length)
+		printf("范围有错  ");
+	i--;
+	for(j=i;j<L->length-1;j++)
+		L->data[j]=L->data[j+1];
+	L->length--;
+}
+void DelNode2(SqList*& L,ElemType x,ElemType y)//删除顺序表所有[]范围元素
+{
+	int k=0,i=0;
+	while(i<L->length)
+	{
+		if(x<=L->data[i] && L->data[i]<=y)
+			k++;
+		else
+			L->data[i-k]=L->data[i];
+		i++;
+	}
+	L->length-=k;
+}
+void ListLength(SqList* L)//顺序表的长度
+{
+	printf("%d",L->length);
+	printf("个数据  ");
+
+}
+void GetElem(SqList* L,int i)//按逻辑序号输出元素
+{
+	if(i<1||i>L->length)
+		printf("范围有错  ");
+	else
+	{
+		printf("逻辑序号");
+		printf("%d",i);
+		printf("对应元素:");
+		printf("%d",L->data[i-1]);
+		printf("  ");
+		
+	}		
+}
+void GetElem1(SqList* L,ElemType e)//按元素输出其逻辑序号
+{
+	int i=0;
+	while(i<L->length && L->data[i]!=e)
+		i++;
+	if(i>=L->length)
+		printf("该顺序表没有此元素  ");
+	else
+	{
+		printf("元素");
+		printf("%d",e);
+		printf("对应逻辑序号:");
+		printf("%d",i+1);
+		printf("  ");
+	}
+
+
+}
+void DispList(SqList* L)//显示顺序表
+{
+	int i;
+	for(i=0;i<L->length;i++)
+	{
+		printf("%d",L->data[i]);
+		printf("  ");
+	}
+	printf("\n");
+}
+void DestroyList(SqList* &L)//销毁释放线性表
+{
+	free(L);
+	printf("线性表已经销毁释放  ");
+	printf("\n");
+}
+#include "exp2-1.cpp" 
+#include<string.h>
+#include<stdlib.h>//不声明，malloc无法使用，显示未定义
+#define	MaxSize 100 //#define结尾不需要;
+#include<stdio.h>//不声明，printf无法使用，显示未定义
+int main()
+{
+	ElemType e;
+	SqList* L;
+	InitList(L);//初始化操作，将线性表置空
+	ListEmpty(L);//判断是否为空表
+	CreatList(L,5);//建立一个顺序存储的线性表
+	DispList(L);//显示所有线性表
+	HeadInsert(L,10);//头插
+	DispList(L);
+	HeadInsert(L,20);//头插
+	DispList(L);
+	EndInsert(L,30);//尾插
+	DispList(L);
+	ListInsert(L,2,40); //随机插入
+	DispList(L);
+	ListLength(L);//顺序表的长度
+	GetElem(L,3);//按逻辑序号输出其元素
+	GetElem1(L,5);//按元素输出其逻辑序号	
+	DispList(L);
+	DelNode(L,1);//删除顺序表所有指定元素
+	DelNode1(L,3);//删除顺序表指定逻辑序号元素
+	DelNode2(L,1,2);//删除顺序表所有[]范围元素
+	DispList(L);
+
+	DestroyList(L);//销毁释放线性表
+
+  return 0;
+}
+```
+```
+/*----------------------------------------------实验2----------------------------------------------
+2.分别用两个顺序存储的线性表对集合进行表示，将其中一个集合并到另一个集合。*/
+#include<string.h>
+#include<stdlib.h>//不声明，malloc无法使用，显示未定义
+#define	MaxSize 100 //#define结尾不需要;
+#include<stdio.h>//不声明，printf无法使用，显示未定义
+typedef char ElemType; 
+typedef struct 
+{
+        ElemType data[MaxSize];
+        int length;
+}SqList;
+void InitList(SqList* &L)//初始化操作，将线性表置空
+{
+	 L=(SqList*) malloc (sizeof(SqList));
+     L->length = 0; 
+} 
+ 
+void CreatList(SqList* &L,int n)//建立一个顺序存储的线性表
+{
+     int i;
+     for(i=0;i<n; i++)
+        scanf("%d",&L->data[i]);
+     L->length = n;
+} 
+bool ListInsert(SqList*& L,int i,ElemType e) //随机插入
+{
+	int j;
+	if(i<1||i>L->length+1)
+		return false;
+	i--;
+	for(j=L->length;j>i;j--)
+		L->data[j]=L->data[j-1];
+	L->data[i]=e;
+	L->length++;
+	return true;
+
+}
+
+int ListLength(SqList* L)//顺序表的长度
+{
+
+	return (L->length);
+
+}
+char GetElem(SqList* L,int i,ElemType &e)//按逻辑序号输出元素
+{
+	if(i<1||i>L->length)
+	{}
+	
+	else
+	{
+		e=L->data[i-1];
+		return e;
+
+		
+	}		
+}
+char LocateElem(SqList* L,ElemType e)//按元素输出其逻辑序号
+{
+	int i=0;
+	while(i<L->length && L->data[i]!=e)
+		i++;
+	if(i>=L->length)
+	{
+		return 0;
+	}
+	else
+	{
+		return (i+1);
+
+	}
+
+}
+void DispList(SqList* L)//显示顺序表
+{
+	int i;
+	for(i=0;i<L->length;i++)
+	{
+		printf("%d",L->data[i]);
+		printf("  ");
+	}
+	printf("\n");
+}
+
+void UnionList(SqList* La,SqList* Lb,SqList* &Lc)
+{
+	int lena,i;
+	ElemType e;
+	InitList(Lc);//初始化操作，将线性表置空
+	for(i=1;i<=ListLength(La);i++)
+	{
+		GetElem(La,i,e);
+		ListInsert(Lc,i,e);
+	}
+	lena=ListLength(La);
+	
+	for(i=1;i<=ListLength(Lb);i++)
+	{
+		GetElem(Lb,i,e);
+		if(LocateElem(La,e)==0)
+		{
+			ListInsert(Lc,++lena,e);
+		}
+	}
+}
+int main()
+{
+	SqList* La;
+	SqList* Lb;
+	SqList* Lc;
+	InitList(La);//初始化操作，将线性表置空
+	CreatList(La,3);//建立一个顺序存储的线性表
+	InitList(Lb);//初始化操作，将线性表置空
+	CreatList(Lb,3);//建立一个顺序存储的线性表
+	
+	UnionList(La,Lb,Lc);
+	DispList(Lc);
+
+return 0;
+}
+```
+```
+/*----------------------------------------------实验3----------------------------------------------*/
+#include<string.h>
+#include<stdlib.h>//不声明，malloc无法使用，显示未定义
+#define	MaxSize 100 //#define结尾不需要;
+#include<stdio.h>//不声明，printf无法使用，显示未定义
+typedef char ElemType; 
+typedef struct 
+{
+        ElemType data[MaxSize];
+        int length;
+}SqList;
+int SortInc(SqList &L);
+void InitList(SqList* &L)//初始化操作，将线性表置空
+{
+	 L=(SqList*) malloc (sizeof(SqList));
+     L->length = 0; 
+} 
+ 
+void CreatList(SqList* &L,int n)//建立一个顺序存储的线性表
+{
+     int i;
+     for(i=0;i<n; i++)
+        scanf("%d",&L->data[i]);
+     L->length = n;
+} 
+void ListInsert(SqList*& L,int i,ElemType e) //随机插入
+{
+	int j;
+	if(i<1||i>L->length+1)
+	{}
+	i--;
+	for(j=L->length;j>i;j--)
+		L->data[j]=L->data[j-1];
+	L->data[i]=e;
+	L->length++;
+}
+void SortInc(SqList* &L)//对顺序表数据元素按升序排列
+{
+	int temp;
+	for(int i = 0;i < L->length - 1;i++)
+		for(int j = i;j < L->length;j++)
+		{
+			if(L->data[i] > L->data[j])//用冒泡法排序
+			{
+				temp = L->data[i];
+				L->data[i] = L->data[j];
+				L->data[j] = temp;
+			}
+		}
+}
+void SortedList(SqList* &L,ElemType e)//有序表插入元素后还是有序
+{
+	int i=0,j;
+	while(i<L->length && L->data[i]<e)
+		i++;
+	for(j=L->length;j>i;j--)
+		L->data[j]=L->data[j-1];
+	L->data[i]=e;		//插入第i+1号元素
+	L->length++;
+}
+void DispList(SqList* L)//显示顺序表
+{
+	int i;
+	for(i=0;i<L->length;i++)
+	{
+		printf("%d",L->data[i]);
+		printf("  ");
+	}
+	printf("\n");
+}
+
+int main()
+{
+	ElemType e;
+	SqList* L;
+	InitList(L);//初始化操作，将线性表置空
+	CreatList(L,5);//建立一个无序的线性表	
+	SortInc(L);//对无序的线性表进行升序排列
+	DispList(L);
+	ListInsert(L,2,4); //随机插入
+	SortInc(L);//（1）随机插入有序表后，再按升序排列
+	DispList(L);
+
+	SortedList(L,5);//（2）有序表插入元素后还是有序
+	DispList(L);
+  return 0;
+} 
+```
+```
+/*----------------------------------------------实验4---------------------------------------------*/
+#include<string.h>
+#include<stdlib.h>//不声明，malloc无法使用，显示未定义
+#define	MaxSize 100 //#define结尾不需要;
+#include<stdio.h>//不声明，printf无法使用，显示未定义
+typedef char ElemType; 
+typedef struct 
+{
+        ElemType data[MaxSize];
+        int length;
+}SqList;
+void InitList(SqList* &L)//初始化操作，将线性表置空
+{
+	 L=(SqList*) malloc (sizeof(SqList));
+     L->length = 0; 
+} 
+ 
+void CreatList(SqList* &L,int n)//建立一个顺序存储的线性表
+{
+     int i;
+     for(i=0;i<n; i++)
+        scanf("%d",&L->data[i]);
+     L->length = n;
+} 
+
+void DelNode2(SqList*& L,ElemType x,ElemType y)//删除顺序表所有[]范围元素
+{
+	int k=0,i=0;
+	while(i<L->length)
+	{
+		if(x<=L->data[i] && L->data[i]<=y)
+			k++;
+		else
+			L->data[i-k]=L->data[i];
+		i++;
+	}
+	L->length-=k;
+}
+void DispList(SqList* L)//显示顺序表
+{
+	int i;
+	for(i=0;i<L->length;i++)
+	{
+		printf("%d",L->data[i]);
+		printf("  ");
+	}
+	printf("\n");
+}
+
+int main()
+{
+
+	SqList* L;
+	InitList(L);//初始化操作，将线性表置空
+	CreatList(L,5);//建立一个顺序存储的线性表
+	DispList(L);//显示所有线性表
+	DelNode2(L,1,2);//删除顺序表所有[]范围元素
+	DispList(L);
+  return 0;
+}
+
+```
